@@ -1,7 +1,5 @@
 """Core data processing functionality."""
 
-import json
-import os
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
@@ -59,8 +57,7 @@ class DataProcessor:
 
         if format not in self.SUPPORTED_FORMATS:
             raise FileFormatError(
-                f"Unsupported format: {format}. "
-                f"Supported formats: {self.SUPPORTED_FORMATS}"
+                f"Unsupported format: {format}. " f"Supported formats: {self.SUPPORTED_FORMATS}"
             )
 
         if self.verbose:
@@ -75,10 +72,10 @@ class DataProcessor:
         elif format == ".parquet":
             self._data = pd.read_parquet(filepath, **kwargs)
 
-        if self.verbose:
-            print(f"Loaded {len(self._data)} rows, {len(self._data.columns)} columns")
+        if self.verbose and self._data is not None:
+            print(f"Loaded {len(self._data)} rows, " f"{len(self._data.columns)} columns")
 
-        return self._data
+        return self._data if self._data is not None else pd.DataFrame()
 
     def save(
         self,
@@ -126,7 +123,7 @@ class DataProcessor:
     def filter(
         self,
         data: pd.DataFrame,
-        conditions: Dict[str, Union[Any, Callable]],
+        conditions: Dict[str, Union[Any, Callable[[Any], bool]]],
     ) -> pd.DataFrame:
         """
         Filter data based on conditions.
@@ -158,23 +155,24 @@ class DataProcessor:
         self,
         data: pd.DataFrame,
         group_by: Union[str, List[str]],
-        agg_func: Dict[str, Union[str, Callable]] = None,
-    ) -> pd.DataFrame:
+        agg_func: Optional[Dict[str, Union[str, Callable[[Any], Any]]]] = None,
+    ) -> Union[pd.DataFrame, pd.Series]:
         """
         Aggregate data by grouping.
 
         Args:
             data: DataFrame to aggregate
             group_by: Column(s) to group by
-            agg_func: Aggregation functions (default: 'count')
+            agg_func: Aggregation functions (default: 'size' for count)
 
         Returns:
             Aggregated DataFrame
         """
-        if agg_func is None:
-            agg_func = {}
-
-        result = data.groupby(group_by).agg(agg_func)
+        if agg_func is None or len(agg_func) == 0:
+            # Default: count the number of records per group
+            result = data.groupby(group_by).size()
+        else:
+            result = data.groupby(group_by).agg(agg_func)
 
         if self.verbose:
             print(f"Aggregated to {len(result)} groups")

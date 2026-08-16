@@ -1,8 +1,6 @@
 """CLI interface for DataProcessor."""
 
-import json
 import sys
-from pathlib import Path
 from typing import Optional
 
 import click
@@ -69,12 +67,12 @@ def inspect(input: str) -> None:
         click.echo(f"Rows: {stats['rows']}")
         click.echo(f"Columns: {stats['columns']}")
         click.echo(f"Memory: {stats['memory_usage']:.2f} MB")
-        click.echo(f"\nColumn Types:")
+        click.echo("\nColumn Types:")
         for col, dtype in stats["dtypes"].items():
             click.echo(f"  - {col}: {dtype}")
 
         if any(stats["missing_values"].values()):
-            click.echo(f"\nMissing Values:")
+            click.echo("\nMissing Values:")
             for col, count in stats["missing_values"].items():
                 if count > 0:
                     click.echo(f"  - {col}: {count}")

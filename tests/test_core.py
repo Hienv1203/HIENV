@@ -13,11 +13,13 @@ from data_processor.exceptions import FileFormatError, ValidationError
 @pytest.fixture
 def sample_data():
     """Create sample data for testing."""
-    return pd.DataFrame({
-        "name": ["Alice", "Bob", "Charlie", "Diana"],
-        "age": [25, 30, 35, 28],
-        "city": ["NYC", "LA", "NYC", "Chicago"],
-    })
+    return pd.DataFrame(
+        {
+            "name": ["Alice", "Bob", "Charlie", "Diana"],
+            "age": [25, 30, 35, 28],
+            "city": ["NYC", "LA", "NYC", "Chicago"],
+        }
+    )
 
 
 @pytest.fixture
