@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data-processor"
+version = "1.0.0"
+description = "Fast, flexible, and developer-friendly Python library for processing structured data"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Data Processor Contributors", email = "contributors@data-processor.dev"}
+]
+keywords = [
+    "data-processing",
+    "csv",
+    "json",
+    "excel",
+    "data-transformation",
+    "etl",
+    "cli-tool"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pandas>=1.3.0",
+    "openpyxl>=3.0.0",
+    "click>=8.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=3.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.970",
+    "isort>=5.0",
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+    "sphinx-autodoc-typehints>=1.18",
+]
+
+[project.scripts]
+data-processor = "data_processor.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Hienv1203/data-processor"
+Documentation = "https://data-processor.readthedocs.io"
+Repository = "https://github.com/Hienv1203/data-processor.git"
+Issues = "https://github.com/Hienv1203/data-processor/issues"
+Changelog = "https://github.com/Hienv1203/data-processor/releases"
+
+[tool.setuptools]
+packages = ["data_processor"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--cov=data_processor --cov-report=html --cov-report=term-missing"
